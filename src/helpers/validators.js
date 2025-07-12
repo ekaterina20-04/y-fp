@@ -54,7 +54,6 @@ export const validateFieldN2 = compose(
 // 3. Количество красных фигур равно кол-ву синих.
 export const validateFieldN3 = compose(
   ([redCount, blueCount]) => redCount === blueCount,
-  // собираем два значения — длину отфильтрованных списков
   juxt([
     compose(length, filter(equals("red")), values),
     compose(length, filter(equals("blue")), values),
@@ -74,17 +73,14 @@ export const validateFieldN5 = pipe(
   reject(equals("white")),
   countBy(identity),
   values,
-  any((n) => n >= 3) // true, если есть значение ≥ 3
+  any((n) => n >= 3)
 );
 // 6. Ровно две зеленые фигуры (одна из зелёных – это треугольник), плюс одна красная. Четвёртая оставшаяся любого доступного цвета, но не нарушающая первые два условия
 export const validateFieldN6 = allPass([
-  // ровно 2 зелёных
   (obj) => pipe(values, filter(equals("green")), length)(obj) === 2,
 
-  // треугольник — одна из зелёных
   propEq("triangle", "green"),
 
-  // как минимум 1 красная
   (obj) => pipe(values, filter(equals("red")), length)(obj) >= 1,
 ]);
 // 7. Все фигуры оранжевые.
@@ -108,6 +104,5 @@ export const validateFieldN9 = whereEq({
 
 // 10. Треугольник и квадрат одного цвета (не белого), остальные – любого цвета
 export const validateFieldN10 = ({ star, square, triangle, circle }) => {
-  // остальные фигуры (star, circle) могут быть любого цвета, проверяем только square и triangle
   return triangle === square && triangle !== "white";
 };
